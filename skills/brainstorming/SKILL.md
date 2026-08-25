@@ -38,10 +38,11 @@ override it:
   you are changing is already here to read. If there is no existing
   flow to change, the task is not bounded. Ask the clarifying
   questions that matter, present a short design IN CHAT (a few
-  sentences to a few short paragraphs), and STOP. Implementation
-  starts only after your human partner says yes to that design — a
-  bounded task's approval is as hard a gate as an architectural
-  one. No spec file, no implementation plan document.
+  sentences to a few short paragraphs, plus 1-3 acceptance scenarios in
+  Gherkin), and STOP. Implementation starts only after your human
+  partner says yes to that design — a bounded task's approval is as
+  hard a gate as an architectural one. No spec file, no implementation
+  plan document.
 - **Architectural** — new projects, new subsystems, changes that
   restructure how components fit together or alter interfaces others
   depend on. Follow the full process: questions, approaches, sectioned
@@ -69,6 +70,7 @@ artifact, never the approval.
 | "It's bounded and the design is obvious — I'll start while they read it" | The gate is the approval, not the design's length. Present, then stop until you hear yes. |
 | "I understand this kind of app, so it's bounded" | Bounded measures the repo, not your familiarity. A new project has no existing flow — it is architectural. |
 | "The spike works, so I'll keep the code" | A spike's output is an answer. Keeping the code is a new request — classify it. |
+| "Prose criteria are faster than scenarios" | Prose criteria cannot be counted, mapped to a task, or disagreed with. Write scenarios. |
 | "It grew, but I'm almost done — no need to re-classify" | Hidden complexity upgrades the path mid-task. Stop and say so. |
 | "They approved the spike, so the follow-up change is approved too" | Each task gets its own classification and its own approval. |
 
@@ -87,7 +89,11 @@ your path and complete them in order.
 **Bounded:**
 1. **Explore project context** — check files, docs, recent commits
 2. **Ask clarifying questions** — one at a time, the ones that matter
-3. **Present short design in chat** — approach, files touched, testing
+3. **Present short design in chat** — approach, files touched, and 1-3
+   `Scenario:` blocks as the acceptance criteria (see
+   superpowers:writing-gherkin for the style rules). The scenarios ARE
+   the testing section — they say what "done" means in terms your human
+   partner can agree or disagree with.
 4. **Get approval** — STOP and wait for an explicit yes; presenting the design and starting in the same breath is skipping the gate
 5. **Implement** — proceed with the normal development workflow (TDD applies); no plan document
 
@@ -97,8 +103,10 @@ your path and complete them in order.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation
 5. **Present design** — in sections scaled to their complexity, get user approval after each section
-6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
-7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+6. **Write design doc** — prose for architecture and rationale, Gherkin
+   `Feature:`/`Scenario:` blocks for the acceptance criteria; save to
+   `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
+7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope, and scenario health (see below)
 8. **User reviews written spec** — ask user to review the spec file before proceeding
 9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
@@ -184,6 +192,10 @@ is the whole process.
 - Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
 - Ask after each section whether it looks right so far
 - Cover: architecture, components, data flow, error handling, testing
+- Present the acceptance criteria as Gherkin scenarios, not prose. A
+  scenario your human partner can disagree with is worth ten paragraphs
+  they can only nod at. Read superpowers:writing-gherkin for the style
+  rules before writing the first one.
 - Be ready to go back and clarify if something doesn't make sense
 
 **Design for isolation and clarity:**
@@ -205,6 +217,14 @@ is the whole process.
 
 - Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
   - (User preferences for spec location override this default)
+- **Structure:** prose sections for purpose, architecture, components, data
+  flow, and trade-offs. A single `## Acceptance Criteria` section holding
+  the `Feature:`/`Scenario:` blocks in fenced gherkin code blocks. The plan
+  refers to these scenarios by name, so every name must be unique across
+  the whole spec.
+- Scenarios cover observable behavior only. Architecture, scale targets, and
+  rationale stay prose — see superpowers:writing-gherkin for what does not
+  become a scenario.
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git
 
@@ -215,6 +235,9 @@ After writing the spec document, look at it with fresh eyes:
 2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
 3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
 4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+5. **Scenario health:** Does every scenario have a `Then`? A scenario with no assertion cannot fail, so it is not a criterion. Does any scenario have two `When` steps? Split it.
+6. **Scenario names unique:** Two scenarios sharing a name make the plan ambiguous, because the plan refers to them by name. Rename.
+7. **Behavior coverage:** Does every behavior the prose promises have a scenario? Prose promising something no scenario checks is where scope silently grows.
 
 Fix any issues inline. No need to re-review — just fix and move on.
 
