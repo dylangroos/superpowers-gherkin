@@ -13,6 +13,11 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
 
+**Required reading:** superpowers:writing-gherkin. The spec's acceptance
+criteria are scenarios; this plan turns each one into a task with a test.
+Detect the runner (that skill's Runner Detection section) BEFORE writing
+any task — the answer picks the task template.
+
 **Context:** If working in an isolated worktree, it should have been created via the `superpowers:using-git-worktrees` skill at execution time.
 
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
@@ -69,6 +74,10 @@ independently testable deliverable.
 **Spec:** [path to the spec/design doc this plan implements — the plan
 argues from the spec, so the spec travels with it; executors read both]
 
+**Runner:** [the BDD runner already installed and where you found it, e.g.
+`pytest-bdd (pyproject.toml:42)`, or `none — plain unit tests named after
+scenarios`. Detected, never assumed. NEVER add a runner a project lacks.]
+
 ## Global Constraints
 
 [The spec's project-wide requirements — version floors, dependency limits,
@@ -84,6 +93,10 @@ include this section.]
 ````markdown
 ### Task N: [Component Name]
 
+**Satisfies:** ["Scenario name", "Another scenario name"] — the spec
+scenarios this task closes, quoted verbatim so the names match. Every
+scenario in the spec appears in exactly one task's Satisfies block.
+
 **Files:**
 - Create: `exact/path/to/file.py`
 - Modify: `exact/path/to/existing.py:123-145`
@@ -97,7 +110,12 @@ include this section.]
 
 - [ ] **Step 1: Write the failing test**
 
+Shape from superpowers:writing-gherkin — Template A when a runner exists,
+Template B when it does not. Template B shown here. Either way the test
+carries the scenario name, so a reviewer can check it against the spec.
+
 ```python
+# Scenario: Specific behavior
 def test_specific_behavior():
     result = function(input)
     assert result == expected
@@ -137,12 +155,14 @@ Every step must contain the actual content an engineer needs. These are **plan f
 - "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
 - Steps that describe what to do without showing how (code blocks required for code steps)
 - References to types, functions, or methods not defined in any task
+- A `Satisfies:` block naming a scenario that is not in the spec, or paraphrasing one instead of quoting it
+- A step that adds a BDD runner the project does not already depend on
 
 ## Self-Review
 
 After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
 
-**1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
+**1. Scenario coverage:** Count the `Scenario:` blocks in the spec. Count the distinct scenario names across every `Satisfies:` block in the plan. The two counts must match, and every spec scenario must appear in exactly one task. A scenario in no task is a missing task; a scenario in two tasks is a boundary you drew wrong. Then skim the spec's prose sections — architecture, data flow, error handling — and confirm each is carried by some task too.
 
 **2. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
 
