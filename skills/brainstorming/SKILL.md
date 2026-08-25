@@ -237,10 +237,15 @@ from without going back to your human partner. Cover:
 - approaches (above)
 - the parts of the how they decided, as they decided them
 - what's left to the builder
+- acceptance criteria as Gherkin: a `## Acceptance Criteria` section
+  holding `Feature:`/`Scenario:` blocks in a fenced `gherkin` block.
+  Scenarios cover observable behavior only; architecture and rationale
+  stay prose. The plan cites scenarios by name, so every name is unique.
+  Read superpowers:writing-gherkin before writing the first one.
 
 For a small change, the short design covers the same points in a line
-or two each and goes straight to your human partner, without the
-builder check.
+or two each, with 1-3 scenarios as its acceptance criteria, and goes
+straight to your human partner, without the builder check.
 
 **Where it goes:** in a software repo,
 `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`, committed.
@@ -292,6 +297,7 @@ superpowers:writing-plans and no other skill.
 | "I should explain the process first" | Ask your question. The process shows itself. |
 | "They said 'sounds good' to the idea" | Approval covers what you showed them. A design doc you haven't written isn't approved. |
 | "The spike works, I'll keep building on it" | Keeping it is a new request. Back through the gate. |
+| "Prose criteria are faster than scenarios" | Prose criteria cannot be counted, mapped to a task, or disagreed with. Write scenarios. |
 
 ## Visual Companion
 
